@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Exchange</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta2/dist/css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="container mt-5">
+    <h2 class="text-center">Currency Exchange Rate</h2>
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <form id="exchangeForm">
+          <div class="mb-3">
+            <label for="baseCurrency" class="form-label">Base Currency</label>
+            <input type="text" class="form-control" id="baseCurrency" placeholder="e.g., BTC" required>
+          </div>
+          <div class="mb-3">
+            <label for="exchangeCurrency" class="form-label">Exchange Currency</label>
+            <input type="text" class="form-control" id="exchangeCurrency" placeholder="e.g., USD" required>
+          </div>
+          <button type="submit" class="btn btn-primary w-100">Get Exchange Rate</button>
+        </form>
+
+        <div class="mt-4" id="result" style="display: none;">
+          <h4>Exchange Rate:</h4>
+          <p id="rateOutput"></p>
+        </div>
+
+        <div class="mt-4 alert alert-danger" id="error" style="display: none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('exchangeForm').addEventListener('submit', function (e) {
+      e.preventDefault();  // Prevent the form from submitting traditionally
+
+      const baseCurrency = document.getElementById('baseCurrency').value.trim();
+      const exchangeCurrency = document.getElementById('exchangeCurrency').value.trim();
+
+      // Hide previous results
+      document.getElementById('result').style.display = 'none';
+      document.getElementById('error').style.display = 'none';
+
+      // Fetch the exchange rate from the backend
+      fetch(`http://localhost:3000/api/exchange-rate?currency=${baseCurrency}&exchange_currency=${exchangeCurrency}`)
+        .then(response => response.json())
+        .then(data => {
+          if (data.error) {
+            // Show error
+            document.getElementById('error').innerText = data.error;
+            document.getElementById('error').style.display = 'block';
+          } else {
+            // Show result
+            document.getElementById('rateOutput').innerText = `1 ${data.base_currency} = ${data.exchange_rate} ${data.exchange_currency}`;
+            document.getElementById('result').style.display = 'block';
+          }
+        })
+        .catch(error => {
+          // Show error
+          document.getElementById('error').innerText = 'An error occurred while fetching the exchange rate.';
+          document.getElementById('error').style.display = 'block';
+        });
+    });
+  </script>
+</body>
+</html>
