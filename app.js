@@ -40,6 +40,12 @@ app.get('/api/exchange-rate', async (req, res) => {
     }
   });
 
+  // Define the /api endpoint to load index.html
+app.get('/api', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  // express.static(path.join(__dirname, 'public'));
+});
+
 const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
