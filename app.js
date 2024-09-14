@@ -41,7 +41,7 @@ app.get('/api/exchange-rate', async (req, res) => {
   });
 
   // Define the /api endpoint to load index.html
-app.get('/api', (req, res) => {
+app.get('/api/front-end', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
   // express.static(path.join(__dirname, 'public'));
 });
